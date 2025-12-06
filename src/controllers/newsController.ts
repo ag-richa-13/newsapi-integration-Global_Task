@@ -258,13 +258,15 @@ export const listNews = (req: Request, res: Response) => {
 
 // ----------------- Single article view -----------------
 export const getNewsById = (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const raw = String(req.params.id || "");
+  const match = raw.match(/\d+/);
+  const id = match ? Number(match[0]) : NaN;
   const cache = readCache();
 
   const all = [...cache.topHeadlines, ...cache.everything];
   const a = all[id];
 
-  if (!a) {
+  if (!Number.isFinite(id) || !a) {
     return res.send("<h2>Article not found</h2>");
   }
 
