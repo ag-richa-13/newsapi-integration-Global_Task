@@ -255,7 +255,7 @@ export const listNews = (req: Request, res: Response) => {
 
 // ----------------- Single article view -----------------
 export const getNewsById = (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = Number((req.params as any).id ?? (req.params as any).num);
   const cache = readCache();
 
   const all = [...cache.topHeadlines, ...cache.everything];

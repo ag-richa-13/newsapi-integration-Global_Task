@@ -63,6 +63,14 @@ PORT=5000
 
 Note: Do not commit your real API key.
 
+## API Key
+
+- Get a free API key from NewsAPI:
+  - Sign up at https://newsapi.org/
+  - Copy your key from the account dashboard
+- Add it to `.env` as `NEWS_API_KEY=<your-key>`
+- The app reads this value in `src/api/newsApiClient.ts` using `dotenv`
+
 ## Run
 
 - Development:
@@ -85,6 +93,8 @@ npm start
 - `GET /news/list` — List articles with filters and pagination
   - Query params: `search` (title/description), `category` (source name), `page` (default 1)
 - `GET /news/:id` — Single article details by index in the cached list
+- `GET /post/{id}` — Alias to open a single article by index
+  - Use `/post/5` in the browser (no colon or braces)
 
 ### Examples
 
@@ -94,6 +104,9 @@ curl "http://localhost:5000/news/list?search=apple&category=bbc&page=2"
 
 # Refresh cache
 curl "http://localhost:5000/news/fetch"
+
+# Open single article by index
+curl "http://localhost:5000/post/0"
 ```
 
 ## Error Handling
