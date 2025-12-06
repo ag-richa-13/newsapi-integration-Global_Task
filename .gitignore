@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+data/newsCache.json
+.vscode/
+npm-debug.log
+.DS_Store
