@@ -63,6 +63,13 @@ PORT=5000
 
 Note: Do not commit your real API key.
 
+## Get Your NewsAPI Key
+
+- Visit https://newsapi.org/
+- Sign up and generate an API key from your account dashboard
+- Put it in `.env` as `NEWS_API_KEY=YOUR_NEWS_API_KEY`
+- Restart the server after adding or changing the key
+
 ## Run
 
 - Development:
@@ -94,6 +101,9 @@ curl "http://localhost:5000/news/list?search=apple&category=bbc&page=2"
 
 # Refresh cache
 curl "http://localhost:5000/news/fetch"
+
+# Open single article by ID (index from list)
+curl "http://localhost:5000/news/2"
 ```
 
 ## Error Handling
