@@ -18,8 +18,15 @@ export const fetchNews = async (req: Request, res: Response) => {
       cache.everything
     );
 
-    cache.topHeadlines = top.data.articles || cache.topHeadlines;
-    cache.everything = tech.data.articles || cache.everything;
+    const topArticles = Array.isArray(top.data?.articles)
+      ? top.data.articles
+      : cache.topHeadlines;
+    const techArticles = Array.isArray(tech.data?.articles)
+      ? tech.data.articles
+      : cache.everything;
+
+    cache.topHeadlines = topArticles;
+    cache.everything = techArticles;
 
     writeCache(cache);
 
@@ -56,14 +63,10 @@ export const fetchNews = async (req: Request, res: Response) => {
 export const listNews = (req: Request, res: Response) => {
   try {
     const cache = readCache();
-    let articles = [...cache.topHeadlines, ...cache.everything];
-    const idParam = ((req.query.id as string) || "").trim();
-    const idNum = idParam ? parseInt(idParam, 10) : NaN;
-    if (!isNaN(idNum)) {
-      const all = [...cache.topHeadlines, ...cache.everything];
-      const selected = all[idNum];
-      articles = selected ? [selected] : [];
-    }
+    const allWithIndex = [...cache.topHeadlines, ...cache.everything].map(
+      (a, i) => ({ ...a, __index: i })
+    );
+    let articles = allWithIndex;
 
     const search = ((req.query.search as string) || "").trim().toLowerCase();
     const category = ((req.query.category as string) || "")
@@ -140,7 +143,7 @@ export const listNews = (req: Request, res: Response) => {
               ${(a.description || "").slice(0, 120)}...
             </p>
             <a href="/news/${
-              start + idx
+              (a as any).__index
             }" class="btn btn-sm btn-outline-primary rounded-pill">
               Read Details →
             </a>
@@ -255,7 +258,7 @@ export const listNews = (req: Request, res: Response) => {
 
 // ----------------- Single article view -----------------
 export const getNewsById = (req: Request, res: Response) => {
-  const id = Number((req.params as any).id ?? (req.params as any).num);
+  const id = Number(req.params.id);
   const cache = readCache();
 
   const all = [...cache.topHeadlines, ...cache.everything];

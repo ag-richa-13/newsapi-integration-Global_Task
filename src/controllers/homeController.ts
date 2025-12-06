@@ -18,8 +18,12 @@ export const showHome = async (req: Request, res: Response) => {
         []
       );
 
-      cache.topHeadlines = top.data.articles || [];
-      cache.everything = tech.data.articles || [];
+      cache.topHeadlines = Array.isArray(top.data?.articles)
+        ? top.data.articles
+        : [];
+      cache.everything = Array.isArray(tech.data?.articles)
+        ? tech.data.articles
+        : [];
 
       writeCache(cache);
     } catch (e) {
